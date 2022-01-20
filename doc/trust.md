@@ -5,10 +5,14 @@ certificate should be trusted. This is performed by building a _chain of trust_
 and matching it to a local _trust store_.
 
 First, the client verifies the domain name (or IP address) appears on the
-certificate. If the certificate includes _subject alternate names_ (SANs), then
-it must appear there. Otherwise, the common name of the subject is used. A `*`
-may be used as a wildcard in certain conditions, typically the leftmost
-component, for example `*.example.com`.
+certificate. Newer client libraries only check the _subject alternate names_
+(SANs). These include NSS (CURL, Firefox) and Go (etcd). Historically, the
+`commonName` of the subject was used instead.
+
+Domain names can contain a `*` as a wildcard, under certain conditions. In
+practice, it is only ever the leftmost component, for example `*.example.com`.
+A wildcard only matches a single domain component, for example
+`foo.example.com`, but not `bar.foo.example.com`.
 
 ## Chain of trust
 
